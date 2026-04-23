@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>QOWL World — премиум</title>
+    <title>QOWL World</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -17,6 +17,7 @@
             color: var(--tg-theme-text-color, #1a1a1a);
             padding: 16px;
             padding-bottom: 30px;
+            transition: background 0.2s;
         }
         .card {
             background: var(--tg-theme-secondary-bg-color, #ffffff);
@@ -41,17 +42,17 @@
         .profile-info { flex: 1; }
         .profile-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
         .profile-username { font-size: 0.9rem; color: var(--tg-theme-hint-color, #6c757d); }
-        .balance { font-size: 1.2rem; font-weight: 600; margin-top: 6px; color: var(--tg-theme-button-color, #2b7be4); }
         button {
             background: var(--tg-theme-button-color, #2b7be4);
             color: white;
             border: none;
             border-radius: 40px;
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
             transition: transform 0.1s, opacity 0.2s;
+            margin: 4px;
         }
         button:active { transform: scale(0.96); }
         .secondary-btn { background: #6c757d; }
@@ -65,31 +66,32 @@
         }
         .tab {
             background: var(--tg-theme-secondary-bg-color, #e9ecef);
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
+            transition: 0.1s;
         }
         .tab.active {
             background: var(--tg-theme-button-color, #2b7be4);
             color: white;
         }
-        .tab-content { display: none; }
+        .tab-content { display: none; animation: fade 0.2s; }
         .tab-content.active { display: block; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
         input, textarea {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-radius: 28px;
             border: 1px solid #ced4da;
             background: var(--tg-theme-bg-color, #fff);
             font-size: 1rem;
             margin-bottom: 12px;
         }
-        input:focus { outline: none; border-color: #2b7be4; box-shadow: 0 0 0 3px rgba(43,123,228,0.2); }
+        input:focus { outline: none; border-color: #2b7be4; box-shadow: 0 0 0 2px rgba(43,123,228,0.2); }
         .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-top: 12px;
             flex-wrap: wrap;
             gap: 8px;
@@ -97,7 +99,7 @@
         .weather-time {
             background: var(--tg-theme-bg-color, #fff);
             border-radius: 40px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             font-size: 0.85rem;
         }
         footer { text-align: center; font-size: 0.7rem; margin-top: 20px; color: #adb5bd; }
@@ -111,7 +113,6 @@
         <div class="profile-info">
             <div class="profile-name" id="userFullName">Загрузка...</div>
             <div class="profile-username" id="userUsername"></div>
-            <div class="balance">💎 <span id="shlakBalance">0</span></div>
         </div>
     </div>
     <div class="info-row">
@@ -125,13 +126,13 @@
     <div class="tab" data-tab="referrals">👥 Рефералы</div>
     <div class="tab" data-tab="achievements">🏆 Достижения</div>
     <div class="tab" data-tab="profile">✏️ Профиль</div>
-    <!-- админ-таб будет добавлен динамически, если передан параметр admin=1 -->
+    <!-- админ-таб добавится позже, если пользователь админ -->
 </div>
 
-<!-- Основные вкладки -->
+<!-- Главная -->
 <div id="home" class="tab-content active">
     <div class="card">
-        <div class="info-row" style="justify-content: center; gap: 12px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
             <button id="checkSubBtn">📌 Проверить подписку</button>
             <button id="topBtn">🏆 Топ рефералов</button>
             <button id="myAchievementsBtn">🏅 Мои достижения</button>
@@ -139,7 +140,7 @@
         <div style="margin-top: 20px; text-align: center;">
             <p>🔗 Твоя реферальная ссылка:</p>
             <input type="text" id="refLinkInput" readonly style="text-align: center;">
-            <div style="margin-top: 12px;">
+            <div style="margin-top: 10px;">
                 <button id="copyRefBtn">📋 Копировать</button>
                 <button id="shareRefBtn">📤 Поделиться</button>
             </div>
@@ -147,18 +148,21 @@
     </div>
 </div>
 
+<!-- Рефералы -->
 <div id="referrals" class="tab-content">
     <div class="card">
         <button id="showRefsBtn">👥 Показать моих рефералов (бот пришлёт в чат)</button>
     </div>
 </div>
 
+<!-- Достижения -->
 <div id="achievements" class="tab-content">
     <div class="card">
-        <p>⭐ Нажмите «Мои достижения» на главной, чтобы увидеть список.</p>
+        <p>⭐ Нажмите «Мои достижения» на главной, чтобы увидеть.</p>
     </div>
 </div>
 
+<!-- Профиль -->
 <div id="profile" class="tab-content">
     <div class="card">
         <label>Имя (отображается в боте):</label>
@@ -167,12 +171,12 @@
     </div>
 </div>
 
-<!-- Админ-панель (будет показана только для админов) -->
-<div id="admin" class="tab-content" style="display: none;">
+<!-- Админ-панель (изначально скрыта) -->
+<div id="admin" class="tab-content">
     <div class="card">
         <h3>📢 Рассылка</h3>
-        <input type="text" id="bcHeader" placeholder="Заголовок рассылки">
-        <textarea id="bcText" rows="3" placeholder="Текст рассылки"></textarea>
+        <input type="text" id="bcHeader" placeholder="Заголовок">
+        <textarea id="bcText" rows="3" placeholder="Текст"></textarea>
         <button id="startBroadcastBtn">▶ Запустить рассылку</button>
     </div>
     <div class="card">
@@ -192,160 +196,185 @@
     </div>
 </div>
 
-<footer>Данные синхронизируются с ботом</footer>
+<footer>Данные синхронизируются с ботом @qowl_bot</footer>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
-    // Определяем, является ли пользователь админом (по параметру URL)
+    // Данные пользователя
+    let user = tg.initDataUnsafe?.user || {};
+    let userId = user.id;
+    let firstName = user.first_name || "Гость";
+    let lastName = user.last_name || "";
+    let username = user.username || "";
+    let photoUrl = user.photo_url || "";
+    let isPremium = user.is_premium || false;
+
+    // Определяем, админ ли пользователь (из URL параметра)
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('admin') === '1';
 
-    let userData = tg.initDataUnsafe?.user || {};
-    let userTelegramId = userData.id;
-    let userFirstName = userData.first_name || "Гость";
-    let userLastName = userData.last_name || "";
-    let userUsername = userData.username || "";
-    let userPhotoUrl = userData.photo_url || "";
-
-    // Элементы DOM
-    const userFullNameEl = document.getElementById("userFullName");
-    const userUsernameEl = document.getElementById("userUsername");
-    const userAvatarEl = document.getElementById("userAvatar");
+    // Элементы
+    const userAvatar = document.getElementById("userAvatar");
+    const userFullName = document.getElementById("userFullName");
+    const userUsernameSpan = document.getElementById("userUsername");
     const refLinkInput = document.getElementById("refLinkInput");
     const editNameInput = document.getElementById("editName");
-    const saveProfileBtn = document.getElementById("saveProfileBtn");
+    const timeDisplay = document.getElementById("timeDisplay");
+    const weatherDisplay = document.getElementById("weatherDisplay");
+
+    // Кнопки
     const checkSubBtn = document.getElementById("checkSubBtn");
     const topBtn = document.getElementById("topBtn");
     const myAchievementsBtn = document.getElementById("myAchievementsBtn");
     const showRefsBtn = document.getElementById("showRefsBtn");
     const copyRefBtn = document.getElementById("copyRefBtn");
     const shareRefBtn = document.getElementById("shareRefBtn");
+    const saveProfileBtn = document.getElementById("saveProfileBtn");
 
-    // Админские элементы (если админ)
-    let startBroadcastBtn, searchUserBtn, banUserBtn, unbanUserBtn, statsBtn;
+    // Админские кнопки
+    const startBroadcastBtn = document.getElementById("startBroadcastBtn");
+    const searchUserBtn = document.getElementById("searchUserBtn");
+    const banUserBtn = document.getElementById("banUserBtn");
+    const unbanUserBtn = document.getElementById("unbanUserBtn");
+    const statsBtn = document.getElementById("statsBtn");
+
+    // Отправка команды боту
+    function sendCommand(type, extra = {}) {
+        tg.sendData(JSON.stringify({ type, ...extra }));
+    }
+
+    // Установка аватарки
+    if (photoUrl) {
+        userAvatar.src = photoUrl;
+    } else {
+        const canvas = document.createElement('canvas');
+        canvas.width = 70; canvas.height = 70;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#2b7be4";
+        ctx.fillRect(0, 0, 70, 70);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 32px sans-serif";
+        ctx.fillText((firstName[0] || "U").toUpperCase(), 22, 48);
+        userAvatar.src = canvas.toDataURL();
+    }
+
+    const fullName = lastName ? `${firstName} ${lastName}` : firstName;
+    userFullName.innerHTML = `${fullName} ${isPremium ? '<span style="background:gold; border-radius:20px; padding:2px 8px;">⭐ PREMIUM</span>' : ''}`;
+    userUsernameSpan.innerText = username ? `@${username}` : "";
+
+    // Реферальная ссылка с ботом @qowl_bot
+    const botUsername = "qowl_bot";
+    const refLink = `https://t.me/${botUsername}?start=${userId}`;
+    refLinkInput.value = refLink;
+
+    // Обработчики кнопок (все работают)
+    copyRefBtn.onclick = () => {
+        refLinkInput.select();
+        document.execCommand("copy");
+        tg.showPopup({ title: "Готово", message: "Ссылка скопирована!", buttons: [{ type: "ok" }] });
+    };
+    shareRefBtn.onclick = () => {
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=Присоединяйся к QOWL World!`);
+    };
+    showRefsBtn.onclick = () => sendCommand("get_refs");
+    checkSubBtn.onclick = () => sendCommand("check_subscription_web");
+    topBtn.onclick = () => sendCommand("get_top");
+    myAchievementsBtn.onclick = () => sendCommand("get_achievements");
+    saveProfileBtn.onclick = () => {
+        const newName = editNameInput.value.trim();
+        if (newName) sendCommand("update_name", { name: newName });
+        else alert("Введите имя");
+    };
+
+    // Админские обработчики
+    if (startBroadcastBtn) {
+        startBroadcastBtn.onclick = () => {
+            const header = document.getElementById("bcHeader").value;
+            const text = document.getElementById("bcText").value;
+            if (header && text) sendCommand("start_broadcast", { header, text });
+            else alert("Заполните заголовок и текст");
+        };
+    }
+    if (searchUserBtn) {
+        searchUserBtn.onclick = () => {
+            const query = document.getElementById("searchUserId").value.trim();
+            if (query) sendCommand("search_user", { query });
+            else alert("Введите ID или @username");
+        };
+    }
+    if (banUserBtn) {
+        banUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendCommand("ban_user", { user_id: parseInt(uid) });
+            else alert("Введите числовой ID");
+        };
+    }
+    if (unbanUserBtn) {
+        unbanUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendCommand("unban_user", { user_id: parseInt(uid) });
+            else alert("Введите числовой ID");
+        };
+    }
+    if (statsBtn) {
+        statsBtn.onclick = () => sendCommand("get_stats");
+    }
+
+    // Переключение вкладок
+    const tabs = document.querySelectorAll(".tab");
+    const contents = document.querySelectorAll(".tab-content");
+    function switchTab(tabId) {
+        contents.forEach(c => c.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        tabs.forEach(t => t.classList.remove("active"));
+        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add("active");
+    }
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            const tabId = tab.getAttribute("data-tab");
+            switchTab(tabId);
+        });
+    });
+
+    // Показываем админ-вкладку, если isAdmin
     if (isAdmin) {
-        startBroadcastBtn = document.getElementById("startBroadcastBtn");
-        searchUserBtn = document.getElementById("searchUserBtn");
-        banUserBtn = document.getElementById("banUserBtn");
-        unbanUserBtn = document.getElementById("unbanUserBtn");
-        statsBtn = document.getElementById("statsBtn");
-        // Показать админ-вкладку
         const tabsContainer = document.getElementById("tabsContainer");
         const adminTab = document.createElement("div");
         adminTab.className = "tab";
         adminTab.setAttribute("data-tab", "admin");
         adminTab.innerText = "⚙️ Админ";
-        tabsContainer.appendChild(adminTab);
         adminTab.addEventListener("click", () => switchTab("admin"));
-        // Показать контент админки
-        document.getElementById("admin").style.display = "block";
+        tabsContainer.appendChild(adminTab);
+        // Также убедимся, что блок admin виден (он уже есть в DOM)
     }
-
-    // Функция отправки команды боту
-    function sendToBot(type, additional = {}) {
-        tg.sendData(JSON.stringify({ type, ...additional }));
-    }
-
-    // Переключение вкладок
-    function switchTab(tabId) {
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-        document.getElementById(tabId).classList.add("active");
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add("active");
-    }
-
-    // Обработчики для всех кнопок
-    copyRefBtn.onclick = () => {
-        refLinkInput.select();
-        document.execCommand("copy");
-        alert("Ссылка скопирована!");
-    };
-    shareRefBtn.onclick = () => {
-        const link = refLinkInput.value;
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к QOWL World!`);
-    };
-    showRefsBtn.onclick = () => sendToBot("get_refs");
-    checkSubBtn.onclick = () => sendToBot("check_subscription_web");
-    topBtn.onclick = () => sendToBot("get_top");
-    myAchievementsBtn.onclick = () => sendToBot("get_achievements");
-    saveProfileBtn.onclick = () => {
-        const newName = editNameInput.value.trim();
-        if (newName) sendToBot("update_name", { name: newName });
-        else alert("Введите имя");
-    };
-
-    // Админ-функции
-    if (isAdmin && startBroadcastBtn) {
-        startBroadcastBtn.onclick = () => {
-            const header = document.getElementById("bcHeader").value;
-            const text = document.getElementById("bcText").value;
-            if (header && text) sendToBot("start_broadcast", { header, text });
-            else alert("Заполните заголовок и текст");
-        };
-        searchUserBtn.onclick = () => {
-            const query = document.getElementById("searchUserId").value.trim();
-            if (query) sendToBot("search_user", { query });
-            else alert("Введите ID или username");
-        };
-        banUserBtn.onclick = () => {
-            const uid = document.getElementById("banUserId").value.trim();
-            if (uid && /^\d+$/.test(uid)) sendToBot("ban_user", { user_id: parseInt(uid) });
-            else alert("Введите числовой ID");
-        };
-        unbanUserBtn.onclick = () => {
-            const uid = document.getElementById("banUserId").value.trim();
-            if (uid && /^\d+$/.test(uid)) sendToBot("unban_user", { user_id: parseInt(uid) });
-            else alert("Введите числовой ID");
-        };
-        statsBtn.onclick = () => sendToBot("get_stats");
-    }
-
-    // Отображение аватарки
-    if (userPhotoUrl) userAvatarEl.src = userPhotoUrl;
-    else {
-        const canvas = document.createElement('canvas');
-        canvas.width = 70; canvas.height = 70;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = "#2b7be4";
-        ctx.fillRect(0,0,70,70);
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 32px sans-serif";
-        ctx.fillText((userFirstName[0] || "U").toUpperCase(), 22, 48);
-        userAvatarEl.src = canvas.toDataURL();
-    }
-    const fullName = userLastName ? `${userFirstName} ${userLastName}` : userFirstName;
-    userFullNameEl.innerText = `${fullName} ${userData.is_premium ? '⭐ PREMIUM' : ''}`;
-    userUsernameEl.innerText = userUsername ? `@${userUsername}` : "";
-    const botUsername = "QOWLBot"; // замените на имя вашего бота
-    refLinkInput.value = `https://t.me/${botUsername}?start=${userTelegramId}`;
 
     // Время и погода
     function updateTime() {
         const now = new Date();
-        document.getElementById("timeDisplay").innerHTML = `⏰ ${now.toLocaleTimeString()}`;
+        timeDisplay.innerText = `⏰ ${now.toLocaleTimeString()}`;
     }
     updateTime();
     setInterval(updateTime, 1000);
 
-    async function getWeather() {
+    async function fetchWeather() {
         try {
-            const ipRes = await fetch('https://ipapi.co/json/');
-            const ipData = await ipRes.json();
+            const res = await fetch('https://ipapi.co/json/');
+            const ipData = await res.json();
             const city = ipData.city || "Москва";
             const weatherRes = await fetch(`https://wttr.in/${city}?format=j1&lang=ru`);
-            const weatherData = await weatherRes.json();
-            const temp = weatherData.current_condition[0].temp_C;
-            const condition = weatherData.current_condition[0].lang_ru[0].value;
-            document.getElementById("weatherDisplay").innerHTML = `🌍 ${city} | 🌡️ ${temp}°C ${condition}`;
+            const weather = await weatherRes.json();
+            const temp = weather.current_condition[0].temp_C;
+            const desc = weather.current_condition[0].lang_ru[0].value;
+            weatherDisplay.innerText = `🌍 ${city} | 🌡️ ${temp}°C ${desc}`;
         } catch(e) {
-            document.getElementById("weatherDisplay").innerHTML = "🌤️ Погода недоступна";
+            weatherDisplay.innerText = "🌤️ Погода недоступна";
         }
     }
-    getWeather();
-    setInterval(getWeather, 600000);
+    fetchWeather();
+    setInterval(fetchWeather, 600000);
 </script>
 </body>
 </html>
