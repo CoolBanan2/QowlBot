@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QOWL - Игра в Telegram </title>
+    <title>QOWL - Веб Платформа</title>
     <style>
         * {
             margin: 0;
@@ -12,164 +12,199 @@
         }
 
         body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        .container {
+        .app {
             max-width: 500px;
             margin: 0 auto;
-            padding: 10px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            background: #0a0a0a;
         }
 
-        /* Навигация */
-        .navbar {
+        .header {
+            background: rgba(212, 175, 55, 0.1);
+            border-bottom: 2px solid #d4af37;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #d4af37;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .nav-tabs {
             display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            background: #111;
+            border-bottom: 1px solid #222;
+            overflow-x: auto;
         }
 
         .nav-btn {
             flex: 1;
-            padding: 10px;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #d4af37;
-            border-radius: 8px;
+            padding: 15px 10px;
+            background: transparent;
+            border: none;
+            color: #666;
             cursor: pointer;
             font-size: 12px;
             font-weight: 600;
+            border-bottom: 3px solid transparent;
             transition: all 0.3s;
-            text-align: center;
-        }
-
-        .nav-btn.active {
-            background: #d4af37;
-            color: #0a0a0a;
-            border-color: #d4af37;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .nav-btn:hover {
-            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
         }
 
-        /* Контент */
-        .content {
+        .nav-btn.active {
+            color: #d4af37;
+            border-bottom-color: #d4af37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .content-area {
             flex: 1;
-            display: none;
-            animation: fadeIn 0.3s;
+            overflow-y: auto;
+            padding: 15px;
         }
 
-        .content.active {
+        .tab-content {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .tab-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Профиль */
-        .profile-card {
-            background: rgba(212, 175, 55, 0.1);
-            border: 2px solid #d4af37;
-            border-radius: 16px;
-            padding: 20px;
+        .card {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 15px;
             margin-bottom: 15px;
-            backdrop-filter: blur(10px);
+            transition: all 0.3s;
         }
 
-        .profile-header {
-            text-align: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 15px;
+        .card:hover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.12);
         }
 
-        .profile-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #d4af37 0%, #a68a2e 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin: 0 auto 10px;
-            border: 3px solid #d4af37;
-        }
-
-        .profile-name {
-            font-size: 18px;
-            font-weight: 700;
+        .card h3 {
             color: #d4af37;
-            margin: 8px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
-        .profile-id {
-            font-size: 12px;
-            color: #aaa;
-            font-family: monospace;
-        }
-
-        .profile-stat {
+        .card-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            font-size: 13px;
         }
 
-        .profile-stat:last-child {
+        .card-row:last-child {
             border-bottom: none;
         }
 
-        .stat-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .card-label {
+            color: #aaa;
+        }
+
+        .card-value {
+            color: #d4af37;
+            font-weight: 600;
             font-size: 14px;
         }
 
-        .stat-value {
-            font-weight: 700;
-            color: #d4af37;
-            font-size: 16px;
-        }
-
-        /* Форма */
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
+        .button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+            color: #0a0a0a;
             font-weight: 600;
-            margin-bottom: 6px;
-            color: #d4af37;
+            cursor: pointer;
+            transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-size: 13px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button.secondary {
+            background: rgba(212, 175, 55, 0.15);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+        }
+
+        .button.secondary:hover {
+            background: rgba(212, 175, 55, 0.25);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .button-group .button {
+            flex: 1;
+            margin-top: 0;
         }
 
         input, textarea {
             width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 6px;
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-family: inherit;
             transition: all 0.3s;
         }
@@ -177,8 +212,8 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: #d4af37;
-            background: rgba(212, 175, 55, 0.1);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
         }
 
         textarea {
@@ -186,218 +221,126 @@
             min-height: 80px;
         }
 
-        /* Кнопки */
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
-            color: #0a0a0a;
-            flex: 1;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            border: 1px solid #d4af37;
-            flex: 1;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(212, 175, 55, 0.3);
-        }
-
-        .btn-small {
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-
-        /* Рефералы */
-        .refs-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .ref-item {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+        .list-item {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.15);
             padding: 12px;
             border-radius: 8px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 13px;
         }
 
-        .ref-name {
-            font-weight: 600;
-            color: #d4af37;
-        }
-
-        .ref-date {
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        /* Топ */
-        .top-item {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 12px;
-            border-radius: 8px;
+        .list-item.top-item {
             display: flex;
-            align-items: center;
             gap: 12px;
-            margin-bottom: 8px;
         }
 
-        .top-number {
+        .rank {
             font-size: 24px;
             font-weight: 700;
             color: #d4af37;
-            min-width: 40px;
+            min-width: 35px;
             text-align: center;
         }
 
-        .top-info {
+        .rank.gold { color: #ffd700; }
+        .rank.silver { color: #c0c0c0; }
+        .rank.bronze { color: #cd7f32; }
+
+        .rank-info {
             flex: 1;
         }
 
-        .top-name {
-            font-weight: 600;
+        .rank-name {
             color: #d4af37;
+            font-weight: 600;
         }
 
-        .top-refs {
-            font-size: 12px;
+        .rank-count {
             color: #aaa;
-        }
-
-        /* Достижения */
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            font-size: 12px;
         }
 
         .achievement {
-            background: rgba(212, 175, 55, 0.1);
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            padding: 15px;
-            border-radius: 12px;
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 3px solid #ffc107;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #ffc107;
+        }
+
+        .empty-state {
             text-align: center;
-            transition: all 0.3s;
+            padding: 30px 20px;
+            color: #666;
         }
 
-        .achievement.earned {
-            border-color: #d4af37;
-            background: rgba(212, 175, 55, 0.2);
+        .empty-state p {
+            font-size: 14px;
+            margin-bottom: 10px;
         }
 
-        .achievement-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
-
-        .achievement-name {
-            font-size: 12px;
-            font-weight: 600;
-            color: #d4af37;
-        }
-
-        /* Ссылка реф */
         .ref-link-box {
             background: rgba(212, 175, 55, 0.1);
             border: 2px dashed #d4af37;
             padding: 15px;
-            border-radius: 12px;
+            border-radius: 8px;
             text-align: center;
             margin-bottom: 15px;
         }
 
         .ref-link-box p {
-            font-size: 12px;
             color: #aaa;
+            font-size: 12px;
             margin-bottom: 8px;
         }
 
         .ref-link {
-            background: rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.05);
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 6px;
             word-break: break-all;
             font-size: 12px;
-            font-family: monospace;
             color: #d4af37;
             font-weight: 600;
+            font-family: monospace;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .ref-link:hover {
-            background: rgba(212, 175, 55, 0.3);
-        }
-
-        /* Статус */
-        .status-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(212, 175, 55, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .status-text {
-            font-size: 14px;
+            background: rgba(212, 175, 55, 0.15);
         }
 
         .status-badge {
+            display: inline-block;
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
+            margin-top: 5px;
         }
 
         .badge-success {
             background: rgba(34, 197, 94, 0.2);
             color: #22c55e;
-            border: 1px solid #22c55e;
         }
 
         .badge-danger {
             background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
-            border: 1px solid #ef4444;
         }
 
-        /* Уведомления */
+        .badge-warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -410,32 +353,27 @@
             font-weight: 600;
             z-index: 1000;
             animation: slideDown 0.3s;
+            font-size: 13px;
         }
 
         .notification.error {
             background: #ef4444;
         }
 
+        .notification.warning {
+            background: #ffc107;
+            color: #000;
+        }
+
         @keyframes slideDown {
             from {
-                transform: translateX(-50%) translateY(-100px);
+                transform: translateX(-50%) translateY(-50px);
                 opacity: 0;
             }
             to {
                 transform: translateX(-50%) translateY(0);
                 opacity: 1;
             }
-        }
-
-        /* Текст информации */
-        .info-text {
-            background: rgba(212, 175, 55, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #d4af37;
-            margin-bottom: 15px;
-            line-height: 1.6;
-            font-size: 14px;
         }
 
         .loading {
@@ -446,8 +384,8 @@
 
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border: 3px solid rgba(212, 175, 55, 0.2);
             border-top-color: #d4af37;
             border-radius: 50%;
@@ -458,363 +396,596 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Адаптив */
-        @media (max-height: 600px) {
-            .container {
-                padding: 5px;
-            }
-            .profile-card {
-                padding: 15px;
-            }
-        }
-
-        /* Скрытие элементов администратора */
         .admin-only {
             display: none;
         }
 
         .admin-only.visible {
+            display: flex;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .admin-grid .button {
+            margin-top: 0;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
             display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #d4af37;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .achievement-item {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .achievement-item.earned {
+            border-color: #ffc107;
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        .achievement-icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .achievement-name {
+            font-size: 11px;
+            color: #d4af37;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .app {
+                max-width: 100%;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .nav-btn {
+                font-size: 11px;
+                padding: 12px 8px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .button-group .button {
+                width: 100%;
+            }
+
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Навигация -->
-        <div class="navbar">
-            <button class="nav-btn active" onclick="showTab('profile')">👤 Профиль</button>
-            <button class="nav-btn" onclick="showTab('refs')">👥 Рефералы</button>
-            <button class="nav-btn" onclick="showTab('top')">🏆 Топ</button>
-            <button class="nav-btn" onclick="showTab('achievements')">🏅 Достижения</button>
-            <button class="nav-btn admin-only" onclick="showTab('admin')">⚙️ Админ</button>
+    <div class="app">
+        <div class="header">
+            <h1>🎮 QOWL</h1>
+            <p>Веб Платформа</p>
         </div>
 
-        <!-- Профиль -->
-        <div id="profile" class="content active">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="profile-avatar">👤</div>
-                    <div class="profile-name" id="profileName">Загрузка...</div>
-                    <div class="profile-id" id="profileId"></div>
-                </div>
-                <div class="profile-stat">
-                    <div class="stat-label">👥 Рефералов</div>
-                    <div class="stat-value" id="profileRefs">0/10</div>
-                </div>
-                <div class="profile-stat">
-                    <div class="stat-label">📢 Подписка</div>
-                    <div class="stat-value" id="profileSub">🔴</div>
-                </div>
-                <div class="profile-stat">
-                    <div class="stat-label">🎮 Доступ к игре</div>
-                    <div class="stat-value" id="profileAccess">🔒</div>
-                </div>
-            </div>
-
-            <div class="ref-link-box">
-                <p>🔗 Ваша реферальная ссылка:</p>
-                <div class="ref-link" id="refLink" onclick="copyRefLink()">Загрузка...</div>
-            </div>
-
-            <div class="form-group">
-                <label>Изменить имя</label>
-                <div class="btn-group">
-                    <input type="text" id="newName" placeholder="Новое имя">
-                    <button class="btn-primary btn-small" onclick="updateName()">✓</button>
-                </div>
-            </div>
-
-            <button class="btn-primary" onclick="checkSubscription()" style="width: 100%;">
-                ✅ Проверить подписку
-            </button>
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="switchTab('profile')">👤 Профиль</button>
+            <button class="nav-btn" onclick="switchTab('refs')">👥 Рефералы</button>
+            <button class="nav-btn" onclick="switchTab('top')">🏆 Топ</button>
+            <button class="nav-btn" onclick="switchTab('achievements')">🏅 Достижения</button>
+            <button class="nav-btn admin-only" id="adminNavBtn" onclick="switchTab('admin')">⚙️ Админ</button>
         </div>
 
-        <!-- Рефералы -->
-        <div id="refs" class="content">
-            <h2 style="margin-bottom: 15px; color: #d4af37;">👥 Ваши рефералы</h2>
-            <div id="refsList" class="refs-list">
-                <div class="loading">
-                    <div class="spinner"></div>
+        <div class="content-area">
+            <!-- ПРОФИЛЬ -->
+            <div id="profile" class="tab-content active">
+                <div class="card">
+                    <h3>👤 Личная информация</h3>
+                    <div class="card-row">
+                        <span class="card-label">ID:</span>
+                        <span class="card-value" id="profileUserId">-</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Ник:</span>
+                        <span class="card-value" id="profileUsername">-</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Имя:</span>
+                        <span class="card-value" id="profileName">-</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Дата присоединения:</span>
+                        <span class="card-value" id="profileDate">-</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Статистика</h3>
+                    <div class="card-row">
+                        <span class="card-label">Рефералы:</span>
+                        <span class="card-value"><span id="profileRefs">0</span>/10</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Пригласил:</span>
+                        <span class="card-value" id="profileInviter">-</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📢 Подписка</h3>
+                    <div class="card-row">
+                        <span class="card-label">Статус:</span>
+                        <span class="card-value" id="profileSubStatus">🔴 Не подписан</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎮 Доступ к игре</h3>
+                    <div class="card-row">
+                        <span class="card-label">Статус:</span>
+                        <span class="card-value" id="profileGameStatus">🔒 Закрыт</span>
+                    </div>
+                </div>
+
+                <div class="ref-link-box">
+                    <p>🔗 Ваша реферальная ссылка:</p>
+                    <div class="ref-link" id="refLink" onclick="copyRefLink()">Загрузка...</div>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Изменить имя</h3>
+                    <input type="text" id="newName" placeholder="Введите новое имя">
+                    <button class="button" onclick="updateName()">✓ Сохранить</button>
+                </div>
+
+                <button class="button secondary" onclick="checkSubscription()">✅ Проверить подписку</button>
+            </div>
+
+            <!-- РЕФЕРАЛЫ -->
+            <div id="refs" class="tab-content">
+                <div id="refsList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Топ -->
-        <div id="top" class="content">
-            <h2 style="margin-bottom: 15px; color: #d4af37;">🏆 Топ-10 рефералов</h2>
-            <div id="topList" class="refs-list">
-                <div class="loading">
-                    <div class="spinner"></div>
+            <!-- ТОП -->
+            <div id="top" class="tab-content">
+                <div id="topList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Достижения -->
-        <div id="achievements" class="content">
-            <h2 style="margin-bottom: 15px; color: #d4af37;">🏅 Достижения</h2>
-            <div id="achievementsList" class="achievements-grid">
-                <div class="loading" style="grid-column: 1/-1;">
-                    <div class="spinner"></div>
+            <!-- ДОСТИЖЕНИЯ -->
+            <div id="achievements" class="tab-content">
+                <div id="achievementsList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Админ панель -->
-        <div id="admin" class="content admin-only">
-            <h2 style="margin-bottom: 15px; color: #d4af37;">⚙️ Админ-панель</h2>
-
-            <!-- Поиск -->
-            <div class="profile-card">
-                <h3 style="color: #d4af37; margin-bottom: 10px; font-size: 14px;">🔍 Поиск пользователя</h3>
-                <div class="form-group">
+            <!-- АДМИН ПАНЕЛЬ -->
+            <div id="admin" class="tab-content">
+                <div class="card">
+                    <h3>🔍 Поиск пользователя</h3>
                     <input type="text" id="searchQuery" placeholder="ID или @username">
+                    <button class="button" onclick="adminSearch()">Поиск</button>
+                    <div id="searchResult" style="margin-top: 12px;"></div>
                 </div>
-                <button class="btn-primary" onclick="adminSearch()">Поиск</button>
-                <div id="searchResult" style="margin-top: 10px;"></div>
-            </div>
 
-            <!-- Бан/Разбан -->
-            <div class="profile-card">
-                <h3 style="color: #d4af37; margin-bottom: 10px; font-size: 14px;">🚫 Бан/Разбан</h3>
-                <div class="form-group">
-                    <input type="text" id="banUserId" placeholder="ID пользователя" pattern="[0-9]+">
+                <div class="card">
+                    <h3>🚫 Бан/Разбан</h3>
+                    <input type="number" id="banUserId" placeholder="ID пользователя">
+                    <div class="button-group">
+                        <button class="button" onclick="banUser()">🚫 Забанить</button>
+                        <button class="button secondary" onclick="unbanUser()">✅ Разбанить</button>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <button class="btn-primary" onclick="banUser()">🚫 Забанить</button>
-                    <button class="btn-secondary" onclick="unbanUser()">✅ Разбанить</button>
-                </div>
-            </div>
 
-            <!-- Рассылка -->
-            <div class="profile-card">
-                <h3 style="color: #d4af37; margin-bottom: 10px; font-size: 14px;">📢 Рассылка</h3>
-                <div class="form-group">
-                    <label>Заголовок</label>
-                    <input type="text" id="bcHeader" placeholder="Заголовок рассылки">
+                <div class="card">
+                    <h3>📢 Рассылка</h3>
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" id="bcHeader" placeholder="Заголовок">
+                    </div>
+                    <div class="form-group">
+                        <label>Текст</label>
+                        <textarea id="bcText" placeholder="Текст рассылки"></textarea>
+                    </div>
+                    <button class="button" onclick="startBroadcast()">📢 Отправить рассылку</button>
                 </div>
-                <div class="form-group">
-                    <label>Текст</label>
-                    <textarea id="bcText" placeholder="Текст рассылки"></textarea>
+
+                <div class="card">
+                    <h3>📊 Статистика</h3>
+                    <button class="button secondary" onclick="getStats()">📊 Получить графики</button>
                 </div>
-                <button class="btn-primary" onclick="startBroadcast()">📢 Отправить рассылку</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Telegram WebApp
-        let tg = window.Telegram?.WebApp;
-        let userId = null;
+        // ==================== КОНФИГУРАЦИЯ ====================
+        const API_BASE = 'http://localhost:8000/api';
+        let currentUserId = null;
         let isAdmin = false;
 
-        // Инициализация
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            userId = tg.initDataUnsafe?.user?.id;
-            const params = new URLSearchParams(window.location.search);
-            isAdmin = params.get('admin') === '1';
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        window.addEventListener('load', () => {
+            initApp();
+        });
+
+        async function initApp() {
+            const userId = prompt('Введите ваш ID (для демо используйте 123):') || '123';
+            currentUserId = userId;
+            
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}`);
+                if (!response.ok) {
+                    await fetch(`${API_BASE}/users/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: parseInt(userId), username: `user_${userId}`, ref_by: null })
+                    });
+                }
+                
+                checkAdminStatus();
+                loadProfile();
+            } catch (error) {
+                console.error('Ошибка инициализации:', error);
+                notify('Ошибка подключения к серверу', 'error');
+            }
+        }
+
+        function checkAdminStatus() {
+            const adminIds = ['6411263772', '123'];
+            isAdmin = adminIds.includes(String(currentUserId));
             if (isAdmin) {
-                document.querySelectorAll('.admin-only').forEach(el => el.classList.add('visible'));
-                document.querySelector('[onclick="showTab(\'admin\')"]').style.display = 'block';
+                document.getElementById('adminNavBtn').classList.add('visible');
             }
         }
 
-        // Отправка данных в бота
-        function sendData(data) {
-            if (tg) {
-                tg.sendData(JSON.stringify(data));
-            } else {
-                console.log('Data:', data);
-            }
-        }
-
-        // Уведомления
-        function notify(msg, isError = false) {
-            const notif = document.createElement('div');
-            notif.className = 'notification' + (isError ? ' error' : '');
-            notif.textContent = msg;
-            document.body.appendChild(notif);
-            setTimeout(() => notif.remove(), 3000);
-        }
-
-        // Переключение вкладок
-        function showTab(tabName) {
-            document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+        // ==================== ТАБЫ ====================
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
             document.getElementById(tabName)?.classList.add('active');
             event.target.classList.add('active');
-
+            
             if (tabName === 'profile') loadProfile();
-            else if (tabName === 'refs') loadRefs();
-            else if (tabName === 'top') loadTop();
-            else if (tabName === 'achievements') loadAchievements();
+            if (tabName === 'refs') loadRefs();
+            if (tabName === 'top') loadTop();
+            if (tabName === 'achievements') loadAchievements();
         }
 
-        // Профиль
-        function loadProfile() {
-            sendData({ type: 'get_profile' });
+        // ==================== УВЕДОМЛЕНИЯ ====================
+        function notify(message, type = 'success') {
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.style.animation = 'slideDown 0.3s reverse';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
         }
 
-        function updateProfile(data) {
-            const [userId, username, refBy, refs, joinedAt, displayName] = data;
-            document.getElementById('profileName').textContent = displayName || username || 'Пользователь';
-            document.getElementById('profileId').textContent = `ID: ${userId}`;
-            document.getElementById('profileRefs').textContent = `${refs}/10`;
-            document.getElementById('profileSub').textContent = '🔴';
-            document.getElementById('profileAccess').textContent = refs >= 10 ? '✅' : '🔒';
+        // ==================== ПРОФИЛЬ ====================
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_BASE}/users/${currentUserId}`);
+                const user = await response.json();
+                
+                document.getElementById('profileUserId').textContent = user.user_id;
+                document.getElementById('profileUsername').textContent = user.username || 'нет';
+                document.getElementById('profileName').textContent = user.display_name || user.username;
+                document.getElementById('profileDate').textContent = user.joined_at.split('T')[0];
+                document.getElementById('profileRefs').textContent = user.refs;
+                document.getElementById('profileInviter').textContent = user.ref_by ? `@${user.ref_by}` : 'никто';
+                document.getElementById('profileSubStatus').textContent = user.is_subscribed ? '🟢 Подписан' : '🔴 Не подписан';
+                document.getElementById('profileGameStatus').textContent = 
+                    (user.refs >= 10 && user.is_subscribed) ? '✅ Доступ открыт' : '🔒 Требуется: 10 рефералов и подписка';
+                
+                const botUsername = 'qowl_bot';
+                const refLink = `https://t.me/${botUsername}?start=${user.user_id}`;
+                document.getElementById('refLink').textContent = refLink;
+                document.getElementById('newName').value = user.display_name || '';
+            } catch (error) {
+                console.error('Ошибка загрузки профиля:', error);
+            }
+        }
+
+        async function updateName() {
+            const newName = document.getElementById('newName').value.trim();
+            if (!newName) {
+                notify('Введите имя', 'error');
+                return;
+            }
+            
+            try {
+                await fetch(`${API_BASE}/users/${currentUserId}/update-name`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ display_name: newName })
+                });
+                notify('✅ Имя обновлено');
+                loadProfile();
+            } catch (error) {
+                notify('Ошибка обновления имени', 'error');
+            }
         }
 
         function copyRefLink() {
             const link = document.getElementById('refLink').textContent;
-            navigator.clipboard.writeText(link).then(() => notify('Ссылка скопирована!'));
+            navigator.clipboard.writeText(link).then(() => {
+                notify('📋 Ссылка скопирована');
+            });
         }
 
-        function checkSubscription() {
-            sendData({ type: 'check_subscription' });
-            setTimeout(() => loadProfile(), 1000);
-        }
-
-        function updateName() {
-            const name = document.getElementById('newName').value.trim();
-            if (!name) {
-                notify('Введите имя', true);
-                return;
+        async function checkSubscription() {
+            try {
+                await fetch(`${API_BASE}/users/${currentUserId}/check-subscription`, {
+                    method: 'POST'
+                });
+                notify('✅ Подписка проверена');
+                loadProfile();
+            } catch (error) {
+                notify('Ошибка при проверке подписки', 'error');
             }
-            sendData({ type: 'update_name', name });
-            document.getElementById('newName').value = '';
-            setTimeout(() => loadProfile(), 500);
         }
 
-        // Рефералы
-        function loadRefs() {
-            sendData({ type: 'get_refs' });
-        }
-
-        function displayRefs(refs) {
-            const list = document.getElementById('refsList');
-            if (!refs || refs.length === 0) {
-                list.innerHTML = '<div class="info-text">📭 У вас пока нет рефералов</div>';
-                return;
+        // ==================== РЕФЕРАЛЫ ====================
+        async function loadRefs() {
+            try {
+                const response = await fetch(`${API_BASE}/users/${currentUserId}/refs`);
+                const refs = await response.json();
+                
+                let html = '';
+                if (!refs || refs.length === 0) {
+                    html = '<div class="empty-state"><p>📭 У вас пока нет рефералов</p></div>';
+                } else {
+                    html = '<div class="card"><h3>👥 Ваши рефералы</h3>';
+                    refs.forEach((ref, i) => {
+                        html += `
+                            <div class="list-item">
+                                <div>
+                                    <div style="color: #d4af37; font-weight: 600;">${i + 1}. ${ref.username !== 'no_name' ? '@' + ref.username : 'Аноним'}</div>
+                                    <div style="color: #aaa; font-size: 11px;">${ref.joined_at.split('T')[0]}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+                
+                document.getElementById('refsList').innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки рефералов:', error);
             }
-            list.innerHTML = refs.map((ref, i) => `
-                <div class="ref-item">
-                    <div>
-                        <div class="ref-name">${i + 1}. ${ref[0] !== 'no_name' ? '@' + ref[0] : 'Аноним'}</div>
-                        <div class="ref-date">${ref[1]?.substring(0, 10) || ''}</div>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // Топ
-        function loadTop() {
-            sendData({ type: 'get_top' });
-        }
-
-        function displayTop(top) {
-            const list = document.getElementById('topList');
-            if (!top || top.length === 0) {
-                list.innerHTML = '<div class="info-text">🏆 Топ пока пуст</div>';
-                return;
+        // ==================== ТОП ====================
+        async function loadTop() {
+            try {
+                const response = await fetch(`${API_BASE}/users/top/10`);
+                const top = await response.json();
+                
+                let html = '';
+                if (!top || top.length === 0) {
+                    html = '<div class="empty-state"><p>🏆 Топ пока пуст</p></div>';
+                } else {
+                    html = '<div class="card"><h3>🏆 Топ-10 рефераторов</h3>';
+                    top.forEach((item, i) => {
+                        const ranks = ['gold', 'silver', 'bronze'];
+                        const rankClass = i < 3 ? ranks[i] : '';
+                        html += `
+                            <div class="list-item top-item">
+                                <div class="rank ${rankClass}">#${i + 1}</div>
+                                <div class="rank-info">
+                                    <div class="rank-name">@${item.username}</div>
+                                    <div class="rank-count">${item.refs} рефералов</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+                
+                document.getElementById('topList').innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки топа:', error);
             }
-            list.innerHTML = top.map((item, i) => `
-                <div class="top-item">
-                    <div class="top-number">#${i + 1}</div>
-                    <div class="top-info">
-                        <div class="top-name">@${item[1] || 'Unknown'}</div>
-                        <div class="top-refs">${item[2]} рефералов</div>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // Достижения
-        function loadAchievements() {
-            sendData({ type: 'get_achievements' });
+        // ==================== ДОСТИЖЕНИЯ ====================
+        async function loadAchievements() {
+            try {
+                const response = await fetch(`${API_BASE}/users/${currentUserId}/achievements`);
+                const achievements = await response.json();
+                
+                const allAchievements = [
+                    { icon: '🎮', name: 'Появление в боте' },
+                    { icon: '📢', name: 'Подписка на канал' },
+                    { icon: '👥', name: '10 рефералов' }
+                ];
+                
+                let html = '<div class="card"><h3>🏅 Достижения</h3><div class="achievement-grid">';
+                
+                allAchievements.forEach(ach => {
+                    const earned = achievements.includes(ach.name);
+                    html += `
+                        <div class="achievement-item ${earned ? 'earned' : ''}">
+                            <div class="achievement-icon">${ach.icon}</div>
+                            <div class="achievement-name">${ach.name}</div>
+                            ${earned ? '<span class="status-badge badge-success">✓</span>' : ''}
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+                document.getElementById('achievementsList').innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки достижений:', error);
+            }
         }
 
-        function displayAchievements(achievements) {
-            const list = document.getElementById('achievementsList');
-            const allAchievements = [
-                { icon: '🎮', name: 'Появление в боте' },
-                { icon: '📢', name: 'Подписка на канал' },
-                { icon: '👥', name: '10 рефералов' }
-            ];
-
-            list.innerHTML = allAchievements.map(ach => `
-                <div class="achievement ${achievements.includes(ach.name) ? 'earned' : ''}">
-                    <div class="achievement-icon">${ach.icon}</div>
-                    <div class="achievement-name">${ach.name}</div>
-                </div>
-            `).join('');
-        }
-
-        // Админ функции
-        function adminSearch() {
+        // ==================== АДМИН ФУНКЦИИ ====================
+        async function adminSearch() {
             const query = document.getElementById('searchQuery').value.trim();
-            if (!query) return;
-            sendData({ type: 'search_user', query });
-        }
-
-        function displaySearchResult(result) {
-            document.getElementById('searchResult').innerHTML = `
-                <div class="info-text">
-                    <strong>ID:</strong> ${result[0]}<br>
-                    <strong>Username:</strong> @${result[1]}<br>
-                    <strong>Имя:</strong> ${result[4] || result[1]}<br>
-                    <strong>Рефералов:</strong> ${result[2]}<br>
-                    <strong>Дата:</strong> ${result[3]}
-                </div>
-            `;
-        }
-
-        function banUser() {
-            const userId = parseInt(document.getElementById('banUserId').value);
-            if (!userId) {
-                notify('Введите ID', true);
+            if (!query) {
+                notify('Введите ID или username', 'error');
                 return;
             }
-            sendData({ type: 'ban_user', user_id: userId });
-            document.getElementById('banUserId').value = '';
+            
+            try {
+                const response = await fetch(`${API_BASE}/admin/search?query=${encodeURIComponent(query)}`);
+                const result = await response.json();
+                
+                if (result.error) {
+                    document.getElementById('searchResult').innerHTML = '<div class="empty-state"><p>❌ Пользователь не найден</p></div>';
+                } else {
+                    document.getElementById('searchResult').innerHTML = `
+                        <div class="card">
+                            <div class="card-row">
+                                <span class="card-label">ID:</span>
+                                <span class="card-value">${result.user_id}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Username:</span>
+                                <span class="card-value">@${result.username}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Имя:</span>
+                                <span class="card-value">${result.display_name}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Рефералов:</span>
+                                <span class="card-value">${result.refs}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Дата:</span>
+                                <span class="card-value">${result.joined_at.split('T')[0]}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="card-label">Статус:</span>
+                                <span class="card-value">${result.is_banned ? '🚫 Забанен' : '✅ Активен'}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                notify('Ошибка поиска', 'error');
+            }
         }
 
-        function unbanUser() {
-            const userId = parseInt(document.getElementById('banUserId').value);
+        async function banUser() {
+            const userId = document.getElementById('banUserId').value;
             if (!userId) {
-                notify('Введите ID', true);
+                notify('Введите ID', 'error');
                 return;
             }
-            sendData({ type: 'unban_user', user_id: userId });
-            document.getElementById('banUserId').value = '';
+            
+            try {
+                await fetch(`${API_BASE}/admin/ban`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: parseInt(userId) })
+                });
+                notify(`✅ Пользователь ${userId} забанен`);
+                document.getElementById('banUserId').value = '';
+            } catch (error) {
+                notify('Ошибка при бане', 'error');
+            }
         }
 
-        function startBroadcast() {
+        async function unbanUser() {
+            const userId = document.getElementById('banUserId').value;
+            if (!userId) {
+                notify('Введите ID', 'error');
+                return;
+            }
+            
+            try {
+                await fetch(`${API_BASE}/admin/unban`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: parseInt(userId) })
+                });
+                notify(`✅ Пользователь ${userId} разбанен`);
+                document.getElementById('banUserId').value = '';
+            } catch (error) {
+                notify('Ошибка при разбане', 'error');
+            }
+        }
+
+        async function startBroadcast() {
             const header = document.getElementById('bcHeader').value.trim();
             const text = document.getElementById('bcText').value.trim();
+            
             if (!header || !text) {
-                notify('Заполните все поля', true);
+                notify('Заполните все поля', 'error');
                 return;
             }
-            sendData({ type: 'start_broadcast', header, text });
-            document.getElementById('bcHeader').value = '';
-            document.getElementById('bcText').value = '';
-            notify('Рассылка запущена');
+            
+            try {
+                await fetch(`${API_BASE}/admin/broadcast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ header, text })
+                });
+                notify('✅ Рассылка запущена');
+                document.getElementById('bcHeader').value = '';
+                document.getElementById('bcText').value = '';
+            } catch (error) {
+                notify('Ошибка при рассылке', 'error');
+            }
         }
 
-        // Получение refLink при загрузке
-        window.addEventListener('load', () => {
-            if (userId) {
-                const bot = 'qowl_bot'; // Замените на реальное имя бота
-                const refLink = `https://t.me/${bot}?start=${userId}`;
-                document.getElementById('refLink').textContent = refLink;
-                loadProfile();
+        async function getStats() {
+            try {
+                notify('⏳ Генерирую графики...');
+                const response = await fetch(`${API_BASE}/admin/stats`);
+                const stats = await response.json();
+                
+                notify(`📊 Всего пользователей: ${stats.total_users}, Забанено: ${stats.banned_users}`);
+            } catch (error) {
+                notify('Ошибка получения статистики', 'error');
             }
-        });
-
-        // Интеграция с Telegram Bot API (обработка ответов)
-        if (tg && tg.onEvent) {
-            // Обработка событий от бота можно добавить здесь если нужно
         }
     </script>
 </body>
