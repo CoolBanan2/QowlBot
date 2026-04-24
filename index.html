@@ -42,7 +42,6 @@
             font-size: 1.4rem;
             font-weight: 700;
             background: linear-gradient(135deg, #fff, #d4af37);
-            -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
@@ -82,7 +81,6 @@
             overflow-x: auto;
             white-space: nowrap;
             padding-bottom: 4px;
-            -webkit-overflow-scrolling: touch;
         }
         .tab {
             background: #1a1a1a;
@@ -228,22 +226,16 @@
 <footer>QOWL World — синхронизация через бота</footer>
 
 <script>
-    // Конфигурация
     const BOT_TOKEN = "8638375796:AAGlo9QbXA_viI8VxDJ5QF2zWe6im9BgF0o";
     const BOT_USERNAME = "qowl_bot";
 
-    // Получение данных пользователя Telegram (если открыто через WebApp)
     let tg = window.Telegram?.WebApp;
     let user = { id: null, first_name: "Гость", username: "" };
-    let isInTelegram = false;
     if (tg) {
         tg.ready();
         tg.expand();
         user = tg.initDataUnsafe?.user || user;
-        isInTelegram = true;
     } else {
-        // Для тестирования вне Telegram
-        console.warn("Работаем вне Telegram WebView");
         user.id = localStorage.getItem("test_user_id") || Math.floor(Math.random() * 1000000);
         user.first_name = localStorage.getItem("test_name") || "Тестер";
         user.username = localStorage.getItem("test_username") || "tester";
@@ -253,8 +245,6 @@
     const firstName = user.first_name;
     const username = user.username || "";
     const photoUrl = user.photo_url || "";
-
-    // Определяем, админ ли пользователь (по списку ADMINS из бота, но тут проверим через параметр URL)
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('admin') === '1';
 
@@ -264,8 +254,6 @@
     const userUsernameSpan = document.getElementById("userUsername");
     const refLinkInput = document.getElementById("refLinkInput");
     const editNameInput = document.getElementById("editName");
-
-    // Кнопки
     const checkSubBtn = document.getElementById("checkSubBtn");
     const topBtn = document.getElementById("topBtn");
     const myAchievementsBtn = document.getElementById("myAchievementsBtn");
@@ -279,15 +267,11 @@
     const unbanUserBtn = document.getElementById("unbanUserBtn");
     const statsBtn = document.getElementById("statsBtn");
 
-    // Отправка команды боту через HTTP (простой метод)
+    // Отправка команды боту (HTTP)
     async function sendCommand(command, params = "") {
-        if (!userId) {
-            alert("Не удалось определить пользователя");
-            return;
-        }
+        if (!userId) { alert("Не удалось определить пользователя"); return; }
         let text = `/webapp_${command}`;
         if (params) text += `|${params}`;
-        // Отправляем как обычное сообщение через API Telegram
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
         try {
             const response = await fetch(url, {
@@ -296,19 +280,24 @@
                 body: JSON.stringify({ chat_id: userId, text: text })
             });
             const data = await response.json();
-            if (!data.ok) {
-                console.error("Ошибка отправки:", data);
-                alert("Ошибка связи с ботом. Проверьте, что вы начали диалог с ботом (отправьте /start).");
-            } else {
-                console.log("Команда отправлена:", command);
-            }
-        } catch(e) {
-            console.error("HTTP ошибка:", e);
-            alert("Сетевая ошибка. Проверьте интернет.");
-        }
+            if (!data.ok) console.error("Ошибка отправки:", data);
+        } catch(e) { console.error("HTTP ошибка:", e); }
     }
 
-    // Обработчики кнопок
+    // Отправка команды /start для регистрации (важно!)
+    async function sendStartCommand() {
+        if (!userId) return;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        try {
+            await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: userId, text: "/start" })
+            });
+        } catch(e) {}
+    }
+
+    // Обработчики
     showRefsBtn.onclick = () => sendCommand("get_refs");
     checkSubBtn.onclick = () => sendCommand("check_subscription_web");
     topBtn.onclick = () => sendCommand("get_top");
@@ -324,45 +313,36 @@
         alert("Ссылка скопирована!");
     };
     shareRefBtn.onclick = () => {
-        const link = refLinkInput.value;
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к QOWL!`);
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(refLinkInput.value)}&text=Присоединяйся к QOWL!`);
     };
 
     if (isAdmin) {
-        document.getElementById("adminTab").style.display = "flex";
-        if (startBroadcastBtn) {
-            startBroadcastBtn.onclick = () => {
-                const header = document.getElementById("bcHeader").value;
-                const text = document.getElementById("bcText").value;
-                if (header && text) sendCommand("start_broadcast", `${header}|${text}`);
-                else alert("Заполните заголовок и текст");
-            };
-        }
-        if (searchUserBtn) {
-            searchUserBtn.onclick = () => {
-                const query = document.getElementById("searchUserId").value.trim();
-                if (query) sendCommand("search_user", query);
-                else alert("Введите ID или @username");
-            };
-        }
-        if (banUserBtn) {
-            banUserBtn.onclick = () => {
-                const uid = document.getElementById("banUserId").value.trim();
-                if (uid && /^\d+$/.test(uid)) sendCommand("ban_user", uid);
-                else alert("Введите числовой ID");
-            };
-        }
-        if (unbanUserBtn) {
-            unbanUserBtn.onclick = () => {
-                const uid = document.getElementById("banUserId").value.trim();
-                if (uid && /^\d+$/.test(uid)) sendCommand("unban_user", uid);
-                else alert("Введите ID");
-            };
-        }
+        document.getElementById("adminTab").style.display = "block";
+        if (startBroadcastBtn) startBroadcastBtn.onclick = () => {
+            const header = document.getElementById("bcHeader").value;
+            const text = document.getElementById("bcText").value;
+            if (header && text) sendCommand("start_broadcast", `${header}|${text}`);
+            else alert("Заполните заголовок и текст");
+        };
+        if (searchUserBtn) searchUserBtn.onclick = () => {
+            const query = document.getElementById("searchUserId").value.trim();
+            if (query) sendCommand("search_user", query);
+            else alert("Введите ID или @username");
+        };
+        if (banUserBtn) banUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendCommand("ban_user", uid);
+            else alert("Введите числовой ID");
+        };
+        if (unbanUserBtn) unbanUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendCommand("unban_user", uid);
+            else alert("Введите ID");
+        };
         if (statsBtn) statsBtn.onclick = () => sendCommand("get_stats");
     }
 
-    // Профиль
+    // Аватар и профиль
     if (photoUrl) userAvatar.src = photoUrl;
     else {
         const canvas = document.createElement('canvas');
@@ -375,19 +355,13 @@
         ctx.fillText((firstName[0] || "Q").toUpperCase(), 20, 44);
         userAvatar.src = canvas.toDataURL();
     }
-    const fullName = firstName;
-    userFullName.innerHTML = `${fullName} ${user.is_premium ? '<span class="badge">⭐ PREMIUM</span>' : ''}`;
+    userFullName.innerHTML = `${firstName} ${user.is_premium ? '<span class="badge">⭐ PREMIUM</span>' : ''}`;
     userUsernameSpan.innerText = username ? `@${username}` : "";
-
-    const refLink = `https://t.me/${BOT_USERNAME}?start=${userId}`;
-    refLinkInput.value = refLink;
+    refLinkInput.value = `https://t.me/${BOT_USERNAME}?start=${userId}`;
 
     // Время и погода
-    function updateTime() {
-        document.getElementById("timeDisplay").innerHTML = `⏰ ${new Date().toLocaleTimeString()}`;
-    }
-    updateTime();
-    setInterval(updateTime, 1000);
+    function updateTime() { document.getElementById("timeDisplay").innerHTML = `⏰ ${new Date().toLocaleTimeString()}`; }
+    updateTime(); setInterval(updateTime, 1000);
     async function fetchWeather() {
         try {
             const res = await fetch('https://ipapi.co/json/');
@@ -398,14 +372,11 @@
             const temp = weather.current_condition[0].temp_C;
             const desc = weather.current_condition[0].lang_ru[0].value;
             document.getElementById("weatherDisplay").innerHTML = `🌍 ${city} | 🌡️ ${temp}°C ${desc}`;
-        } catch(e) {
-            document.getElementById("weatherDisplay").innerHTML = "🌤️ Погода недоступна";
-        }
+        } catch(e) { document.getElementById("weatherDisplay").innerHTML = "🌤️ Погода недоступна"; }
     }
-    fetchWeather();
-    setInterval(fetchWeather, 600000);
+    fetchWeather(); setInterval(fetchWeather, 600000);
 
-    // Переключение вкладок
+    // Вкладки
     const tabs = document.querySelectorAll(".tab");
     const contents = document.querySelectorAll(".tab-content");
     function switchTab(tabId) {
@@ -415,13 +386,12 @@
         document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add("active");
     }
     tabs.forEach(tab => {
-        if (tab.style.display !== "none") {
-            tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab")));
-        }
+        if (tab.style.display !== "none") tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab")));
     });
 
-    // Автоматическая проверка подписки при загрузке
-    setTimeout(() => sendCommand("check_subscription_auto"), 1000);
+    // Автоматическая регистрация и проверка подписки
+    sendStartCommand();                     // ← ОТПРАВЛЯЕМ /start
+    setTimeout(() => sendCommand("check_subscription_auto"), 2000);
 </script>
 </body>
 </html>
