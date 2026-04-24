@@ -221,59 +221,6 @@
             min-height: 80px;
         }
 
-        .list-item {
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-
-        .list-item.top-item {
-            display: flex;
-            gap: 12px;
-        }
-
-        .rank {
-            font-size: 24px;
-            font-weight: 700;
-            color: #d4af37;
-            min-width: 35px;
-            text-align: center;
-        }
-
-        .rank.gold { color: #ffd700; }
-        .rank.silver { color: #c0c0c0; }
-        .rank.bronze { color: #cd7f32; }
-
-        .rank-info {
-            flex: 1;
-        }
-
-        .rank-name {
-            color: #d4af37;
-            font-weight: 600;
-        }
-
-        .rank-count {
-            color: #aaa;
-            font-size: 12px;
-        }
-
-        .achievement {
-            background: rgba(255, 193, 7, 0.1);
-            border-left: 3px solid #ffc107;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: #ffc107;
-        }
-
         .empty-state {
             text-align: center;
             padding: 30px 20px;
@@ -317,30 +264,6 @@
             background: rgba(212, 175, 55, 0.15);
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 5px;
-        }
-
-        .badge-success {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
-
-        .badge-danger {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .badge-warning {
-            background: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-
         .notification {
             position: fixed;
             top: 20px;
@@ -376,45 +299,12 @@
             }
         }
 
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #d4af37;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(212, 175, 55, 0.2);
-            border-top-color: #d4af37;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         .admin-only {
             display: none;
         }
 
         .admin-only.visible {
             display: flex;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .admin-grid .button {
-            margin-top: 0;
-            padding: 10px;
-            font-size: 12px;
         }
 
         .form-group {
@@ -429,65 +319,6 @@
             margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .achievement-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .achievement-item {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .achievement-item.earned {
-            border-color: #ffc107;
-            background: rgba(255, 193, 7, 0.1);
-        }
-
-        .achievement-icon {
-            font-size: 28px;
-            margin-bottom: 6px;
-        }
-
-        .achievement-name {
-            font-size: 11px;
-            color: #d4af37;
-            font-weight: 600;
-        }
-
-        @media (max-width: 480px) {
-            .app {
-                max-width: 100%;
-            }
-
-            .header h1 {
-                font-size: 28px;
-            }
-
-            .nav-btn {
-                font-size: 11px;
-                padding: 12px 8px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .button-group .button {
-                width: 100%;
-            }
-
-            .admin-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -510,91 +341,46 @@
             <!-- ПРОФИЛЬ -->
             <div id="profile" class="tab-content active">
                 <div class="card">
-                    <h3>👤 Личная информация</h3>
+                    <h3>👤 Ваш профиль</h3>
                     <div class="card-row">
                         <span class="card-label">ID:</span>
-                        <span class="card-value" id="profileUserId">-</span>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Ник:</span>
-                        <span class="card-value" id="profileUsername">-</span>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Имя:</span>
-                        <span class="card-value" id="profileName">-</span>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Дата присоединения:</span>
-                        <span class="card-value" id="profileDate">-</span>
+                        <span class="card-value" id="profileUserId">Загрузка...</span>
                     </div>
                 </div>
-
-                <div class="card">
-                    <h3>📊 Статистика</h3>
-                    <div class="card-row">
-                        <span class="card-label">Рефералы:</span>
-                        <span class="card-value"><span id="profileRefs">0</span>/10</span>
-                    </div>
-                    <div class="card-row">
-                        <span class="card-label">Пригласил:</span>
-                        <span class="card-value" id="profileInviter">-</span>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>📢 Подписка</h3>
-                    <div class="card-row">
-                        <span class="card-label">Статус:</span>
-                        <span class="card-value" id="profileSubStatus">🔴 Не подписан</span>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>🎮 Доступ к игре</h3>
-                    <div class="card-row">
-                        <span class="card-label">Статус:</span>
-                        <span class="card-value" id="profileGameStatus">🔒 Закрыт</span>
-                    </div>
-                </div>
-
                 <div class="ref-link-box">
                     <p>🔗 Ваша реферальная ссылка:</p>
-                    <div class="ref-link" id="refLink" onclick="copyRefLink()">Загрузка...</div>
+                    <div class="ref-link" id="refLink" onclick="copyRefLink()">Запросить в чате</div>
                 </div>
-
                 <div class="card">
                     <h3>📝 Изменить имя</h3>
                     <input type="text" id="newName" placeholder="Введите новое имя">
                     <button class="button" onclick="updateName()">✓ Сохранить</button>
                 </div>
-
-                <button class="button secondary" onclick="checkSubscription()">✅ Проверить подписку</button>
+                <button class="button secondary" onclick="sendCommand('get_profile')">📋 Показать профиль в чате</button>
+                <button class="button secondary" onclick="sendCommand('check_subscription')">✅ Проверить подписку</button>
             </div>
 
             <!-- РЕФЕРАЛЫ -->
             <div id="refs" class="tab-content">
-                <div id="refsList">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                    </div>
+                <div class="empty-state">
+                    <p>👥 Нажмите кнопку ниже, чтобы увидеть список ваших рефералов в чате</p>
+                    <button class="button secondary" onclick="sendCommand('get_refs')">Показать рефералов</button>
                 </div>
             </div>
 
             <!-- ТОП -->
             <div id="top" class="tab-content">
-                <div id="topList">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                    </div>
+                <div class="empty-state">
+                    <p>🏆 Нажмите кнопку ниже, чтобы увидеть топ-10 рефералов в чате</p>
+                    <button class="button secondary" onclick="sendCommand('get_top')">Показать топ</button>
                 </div>
             </div>
 
             <!-- ДОСТИЖЕНИЯ -->
             <div id="achievements" class="tab-content">
-                <div id="achievementsList">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                    </div>
+                <div class="empty-state">
+                    <p>🏅 Нажмите кнопку ниже, чтобы увидеть ваши достижения в чате</p>
+                    <button class="button secondary" onclick="sendCommand('get_achievements')">Показать достижения</button>
                 </div>
             </div>
 
@@ -606,7 +392,6 @@
                     <button class="button" onclick="adminSearch()">Поиск</button>
                     <div id="searchResult" style="margin-top: 12px;"></div>
                 </div>
-
                 <div class="card">
                     <h3>🚫 Бан/Разбан</h3>
                     <input type="number" id="banUserId" placeholder="ID пользователя">
@@ -615,7 +400,6 @@
                         <button class="button secondary" onclick="unbanUser()">✅ Разбанить</button>
                     </div>
                 </div>
-
                 <div class="card">
                     <h3>📢 Рассылка</h3>
                     <div class="form-group">
@@ -628,364 +412,124 @@
                     </div>
                     <button class="button" onclick="startBroadcast()">📢 Отправить рассылку</button>
                 </div>
-
                 <div class="card">
                     <h3>📊 Статистика</h3>
-                    <button class="button secondary" onclick="getStats()">📊 Получить графики</button>
+                    <button class="button secondary" onclick="sendCommand('get_stats')">📊 Получить графики</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // ==================== КОНФИГУРАЦИЯ ====================
-        const API_BASE = 'http://localhost:8000/api';
-        let currentUserId = null;
+        let tg = window.Telegram.WebApp;
+        tg.ready();
+        let currentUserId = tg.initDataUnsafe?.user?.id;
         let isAdmin = false;
 
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-        window.addEventListener('load', () => {
-            initApp();
-        });
-
-        async function initApp() {
-            const userId = prompt('Введите ваш ID (для демо используйте 123):') || '123';
-            currentUserId = userId;
-            
-            try {
-                const response = await fetch(`${API_BASE}/users/${userId}`);
-                if (!response.ok) {
-                    await fetch(`${API_BASE}/users/register`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user_id: parseInt(userId), username: `user_${userId}`, ref_by: null })
-                    });
-                }
-                
-                checkAdminStatus();
-                loadProfile();
-            } catch (error) {
-                console.error('Ошибка инициализации:', error);
-                notify('Ошибка подключения к серверу', 'error');
-            }
+        const adminIds = ['6411263772'];
+        if (currentUserId && adminIds.includes(String(currentUserId))) {
+            isAdmin = true;
+            document.getElementById('adminNavBtn').classList.add('visible');
         }
 
-        function checkAdminStatus() {
-            const adminIds = ['6411263772', '123'];
-            isAdmin = adminIds.includes(String(currentUserId));
-            if (isAdmin) {
-                document.getElementById('adminNavBtn').classList.add('visible');
-            }
+        // Отображение ID пользователя
+        if (currentUserId) {
+            document.getElementById('profileUserId').textContent = currentUserId;
+        } else {
+            document.getElementById('profileUserId').textContent = 'Не определён';
         }
 
-        // ==================== ТАБЫ ====================
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(tabName)?.classList.add('active');
-            event.target.classList.add('active');
-            
-            if (tabName === 'profile') loadProfile();
-            if (tabName === 'refs') loadRefs();
-            if (tabName === 'top') loadTop();
-            if (tabName === 'achievements') loadAchievements();
+        // Установка реферальной ссылки (с username бота)
+        async function setRefLink() {
+            // Упрощённо: ссылка строится через username бота, но мы не знаем его тут статически.
+            // Лучше отправить команду боту и он ответит ссылкой в чате.
+            document.getElementById('refLink').textContent = 'Отправьте команду "Показать профиль" в чате';
+        }
+        setRefLink();
+
+        function sendCommand(type, additional = {}) {
+            const payload = { type, ...additional };
+            tg.sendData(JSON.stringify(payload));
+            showNotification('✅ Команда отправлена боту', 'success');
         }
 
-        // ==================== УВЕДОМЛЕНИЯ ====================
-        function notify(message, type = 'success') {
+        function showNotification(msg, type = 'success') {
             const notif = document.createElement('div');
             notif.className = `notification ${type}`;
-            notif.textContent = message;
+            notif.textContent = msg;
             document.body.appendChild(notif);
-            
             setTimeout(() => {
                 notif.style.animation = 'slideDown 0.3s reverse';
                 setTimeout(() => notif.remove(), 300);
             }, 3000);
         }
 
-        // ==================== ПРОФИЛЬ ====================
-        async function loadProfile() {
-            try {
-                const response = await fetch(`${API_BASE}/users/${currentUserId}`);
-                const user = await response.json();
-                
-                document.getElementById('profileUserId').textContent = user.user_id;
-                document.getElementById('profileUsername').textContent = user.username || 'нет';
-                document.getElementById('profileName').textContent = user.display_name || user.username;
-                document.getElementById('profileDate').textContent = user.joined_at.split('T')[0];
-                document.getElementById('profileRefs').textContent = user.refs;
-                document.getElementById('profileInviter').textContent = user.ref_by ? `@${user.ref_by}` : 'никто';
-                document.getElementById('profileSubStatus').textContent = user.is_subscribed ? '🟢 Подписан' : '🔴 Не подписан';
-                document.getElementById('profileGameStatus').textContent = 
-                    (user.refs >= 10 && user.is_subscribed) ? '✅ Доступ открыт' : '🔒 Требуется: 10 рефералов и подписка';
-                
-                const botUsername = 'qowl_bot';
-                const refLink = `https://t.me/${botUsername}?start=${user.user_id}`;
-                document.getElementById('refLink').textContent = refLink;
-                document.getElementById('newName').value = user.display_name || '';
-            } catch (error) {
-                console.error('Ошибка загрузки профиля:', error);
-            }
-        }
-
-        async function updateName() {
+        function updateName() {
             const newName = document.getElementById('newName').value.trim();
             if (!newName) {
-                notify('Введите имя', 'error');
+                showNotification('Введите имя', 'error');
                 return;
             }
-            
-            try {
-                await fetch(`${API_BASE}/users/${currentUserId}/update-name`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ display_name: newName })
-                });
-                notify('✅ Имя обновлено');
-                loadProfile();
-            } catch (error) {
-                notify('Ошибка обновления имени', 'error');
-            }
+            sendCommand('update_name', { name: newName });
+            document.getElementById('newName').value = '';
         }
 
         function copyRefLink() {
             const link = document.getElementById('refLink').textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                notify('📋 Ссылка скопирована');
-            });
-        }
-
-        async function checkSubscription() {
-            try {
-                await fetch(`${API_BASE}/users/${currentUserId}/check-subscription`, {
-                    method: 'POST'
-                });
-                notify('✅ Подписка проверена');
-                loadProfile();
-            } catch (error) {
-                notify('Ошибка при проверке подписки', 'error');
+            if (link && link !== 'Запросить в чате' && link !== 'Отправьте команду "Показать профиль" в чате') {
+                navigator.clipboard.writeText(link).then(() => showNotification('📋 Ссылка скопирована'));
+            } else {
+                showNotification('Сначала запросите профиль в чате', 'warning');
             }
         }
 
-        // ==================== РЕФЕРАЛЫ ====================
-        async function loadRefs() {
-            try {
-                const response = await fetch(`${API_BASE}/users/${currentUserId}/refs`);
-                const refs = await response.json();
-                
-                let html = '';
-                if (!refs || refs.length === 0) {
-                    html = '<div class="empty-state"><p>📭 У вас пока нет рефералов</p></div>';
-                } else {
-                    html = '<div class="card"><h3>👥 Ваши рефералы</h3>';
-                    refs.forEach((ref, i) => {
-                        html += `
-                            <div class="list-item">
-                                <div>
-                                    <div style="color: #d4af37; font-weight: 600;">${i + 1}. ${ref.username !== 'no_name' ? '@' + ref.username : 'Аноним'}</div>
-                                    <div style="color: #aaa; font-size: 11px;">${ref.joined_at.split('T')[0]}</div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                }
-                
-                document.getElementById('refsList').innerHTML = html;
-            } catch (error) {
-                console.error('Ошибка загрузки рефералов:', error);
-            }
-        }
-
-        // ==================== ТОП ====================
-        async function loadTop() {
-            try {
-                const response = await fetch(`${API_BASE}/users/top/10`);
-                const top = await response.json();
-                
-                let html = '';
-                if (!top || top.length === 0) {
-                    html = '<div class="empty-state"><p>🏆 Топ пока пуст</p></div>';
-                } else {
-                    html = '<div class="card"><h3>🏆 Топ-10 рефераторов</h3>';
-                    top.forEach((item, i) => {
-                        const ranks = ['gold', 'silver', 'bronze'];
-                        const rankClass = i < 3 ? ranks[i] : '';
-                        html += `
-                            <div class="list-item top-item">
-                                <div class="rank ${rankClass}">#${i + 1}</div>
-                                <div class="rank-info">
-                                    <div class="rank-name">@${item.username}</div>
-                                    <div class="rank-count">${item.refs} рефералов</div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                }
-                
-                document.getElementById('topList').innerHTML = html;
-            } catch (error) {
-                console.error('Ошибка загрузки топа:', error);
-            }
-        }
-
-        // ==================== ДОСТИЖЕНИЯ ====================
-        async function loadAchievements() {
-            try {
-                const response = await fetch(`${API_BASE}/users/${currentUserId}/achievements`);
-                const achievements = await response.json();
-                
-                const allAchievements = [
-                    { icon: '🎮', name: 'Появление в боте' },
-                    { icon: '📢', name: 'Подписка на канал' },
-                    { icon: '👥', name: '10 рефералов' }
-                ];
-                
-                let html = '<div class="card"><h3>🏅 Достижения</h3><div class="achievement-grid">';
-                
-                allAchievements.forEach(ach => {
-                    const earned = achievements.includes(ach.name);
-                    html += `
-                        <div class="achievement-item ${earned ? 'earned' : ''}">
-                            <div class="achievement-icon">${ach.icon}</div>
-                            <div class="achievement-name">${ach.name}</div>
-                            ${earned ? '<span class="status-badge badge-success">✓</span>' : ''}
-                        </div>
-                    `;
-                });
-                
-                html += '</div></div>';
-                document.getElementById('achievementsList').innerHTML = html;
-            } catch (error) {
-                console.error('Ошибка загрузки достижений:', error);
-            }
-        }
-
-        // ==================== АДМИН ФУНКЦИИ ====================
-        async function adminSearch() {
+        function adminSearch() {
             const query = document.getElementById('searchQuery').value.trim();
             if (!query) {
-                notify('Введите ID или username', 'error');
+                showNotification('Введите ID или username', 'error');
                 return;
             }
-            
-            try {
-                const response = await fetch(`${API_BASE}/admin/search?query=${encodeURIComponent(query)}`);
-                const result = await response.json();
-                
-                if (result.error) {
-                    document.getElementById('searchResult').innerHTML = '<div class="empty-state"><p>❌ Пользователь не найден</p></div>';
-                } else {
-                    document.getElementById('searchResult').innerHTML = `
-                        <div class="card">
-                            <div class="card-row">
-                                <span class="card-label">ID:</span>
-                                <span class="card-value">${result.user_id}</span>
-                            </div>
-                            <div class="card-row">
-                                <span class="card-label">Username:</span>
-                                <span class="card-value">@${result.username}</span>
-                            </div>
-                            <div class="card-row">
-                                <span class="card-label">Имя:</span>
-                                <span class="card-value">${result.display_name}</span>
-                            </div>
-                            <div class="card-row">
-                                <span class="card-label">Рефералов:</span>
-                                <span class="card-value">${result.refs}</span>
-                            </div>
-                            <div class="card-row">
-                                <span class="card-label">Дата:</span>
-                                <span class="card-value">${result.joined_at.split('T')[0]}</span>
-                            </div>
-                            <div class="card-row">
-                                <span class="card-label">Статус:</span>
-                                <span class="card-value">${result.is_banned ? '🚫 Забанен' : '✅ Активен'}</span>
-                            </div>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                notify('Ошибка поиска', 'error');
-            }
+            sendCommand('search_user', { query: query });
         }
 
-        async function banUser() {
+        function banUser() {
             const userId = document.getElementById('banUserId').value;
             if (!userId) {
-                notify('Введите ID', 'error');
+                showNotification('Введите ID', 'error');
                 return;
             }
-            
-            try {
-                await fetch(`${API_BASE}/admin/ban`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: parseInt(userId) })
-                });
-                notify(`✅ Пользователь ${userId} забанен`);
-                document.getElementById('banUserId').value = '';
-            } catch (error) {
-                notify('Ошибка при бане', 'error');
-            }
+            sendCommand('ban_user', { user_id: parseInt(userId) });
+            document.getElementById('banUserId').value = '';
         }
 
-        async function unbanUser() {
+        function unbanUser() {
             const userId = document.getElementById('banUserId').value;
             if (!userId) {
-                notify('Введите ID', 'error');
+                showNotification('Введите ID', 'error');
                 return;
             }
-            
-            try {
-                await fetch(`${API_BASE}/admin/unban`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: parseInt(userId) })
-                });
-                notify(`✅ Пользователь ${userId} разбанен`);
-                document.getElementById('banUserId').value = '';
-            } catch (error) {
-                notify('Ошибка при разбане', 'error');
-            }
+            sendCommand('unban_user', { user_id: parseInt(userId) });
+            document.getElementById('banUserId').value = '';
         }
 
-        async function startBroadcast() {
+        function startBroadcast() {
             const header = document.getElementById('bcHeader').value.trim();
             const text = document.getElementById('bcText').value.trim();
-            
             if (!header || !text) {
-                notify('Заполните все поля', 'error');
+                showNotification('Заполните все поля', 'error');
                 return;
             }
-            
-            try {
-                await fetch(`${API_BASE}/admin/broadcast`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ header, text })
-                });
-                notify('✅ Рассылка запущена');
-                document.getElementById('bcHeader').value = '';
-                document.getElementById('bcText').value = '';
-            } catch (error) {
-                notify('Ошибка при рассылке', 'error');
-            }
+            sendCommand('start_broadcast', { header: header, text: text });
+            document.getElementById('bcHeader').value = '';
+            document.getElementById('bcText').value = '';
         }
 
-        async function getStats() {
-            try {
-                notify('⏳ Генерирую графики...');
-                const response = await fetch(`${API_BASE}/admin/stats`);
-                const stats = await response.json();
-                
-                notify(`📊 Всего пользователей: ${stats.total_users}, Забанено: ${stats.banned_users}`);
-            } catch (error) {
-                notify('Ошибка получения статистики', 'error');
-            }
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName)?.classList.add('active');
+            event.target.classList.add('active');
         }
     </script>
 </body>
