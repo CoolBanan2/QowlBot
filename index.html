@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>QOWL World — Премиум</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -13,40 +13,39 @@
         }
 
         body {
-            font-family: 'Segoe UI', 'SF Pro Text', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: #0a0a0a;
-            color: #ffffff;
-            padding: 20px 16px 40px;
+            color: #fff;
+            padding: 16px;
+            padding-bottom: 40px;
         }
 
         /* Карточки */
         .card {
-            background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
+            background: #121212;
             border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 28px;
-            padding: 20px;
+            border-radius: 24px;
+            padding: 18px;
             margin-bottom: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.1) inset;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         /* Профиль */
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
+            gap: 14px;
         }
         .avatar {
-            width: 70px;
-            height: 70px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #d4af37;
-            box-shadow: 0 0 12px rgba(212,175,55,0.4);
             background: #1a1a1a;
         }
         .profile-name {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             background: linear-gradient(135deg, #fff, #d4af37);
             -webkit-background-clip: text;
@@ -54,16 +53,16 @@
             color: transparent;
         }
         .profile-username {
-            font-size: 0.85rem;
-            color: #aaaaaa;
+            font-size: 0.8rem;
+            color: #aaa;
             margin-top: 4px;
         }
         .badge {
             background: #d4af37;
-            color: #0a0a0a;
+            color: #000;
             border-radius: 30px;
             padding: 2px 10px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
             margin-left: 8px;
         }
@@ -73,65 +72,46 @@
             background: linear-gradient(135deg, #d4af37, #b8942e);
             border: none;
             border-radius: 40px;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-weight: 600;
             font-size: 0.85rem;
             color: #0a0a0a;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.1s;
             margin: 4px;
         }
-        button:active {
-            transform: scale(0.96);
-            filter: brightness(0.9);
-        }
-        .secondary-btn {
-            background: #2a2a2a;
-            color: #d4af37;
-            border: 1px solid #d4af37;
-        }
-        .danger-btn {
-            background: #8b0000;
-            color: #fff;
-            border: none;
-        }
+        button:active { transform: scale(0.96); }
+        .secondary-btn { background: #2a2a2a; color: #d4af37; border: 1px solid #d4af37; }
+        .danger-btn { background: #8b0000; color: #fff; }
 
-        /* Вкладки */
+        /* Вкладки (горизонтальный скролл для телефона) */
         .tabs {
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
         }
         .tab {
             background: #1a1a1a;
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
             border: 1px solid #333;
             color: #ccc;
+            flex-shrink: 0;
         }
         .tab.active {
             background: #d4af37;
             color: #0a0a0a;
             border-color: #d4af37;
-            font-weight: bold;
         }
-        .tab-content {
-            display: none;
-            animation: fade 0.2s;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        @keyframes fade {
-            from { opacity: 0; transform: translateY(5px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
+        .tab-content { display: none; animation: fade 0.2s; }
+        .tab-content.active { display: block; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
         /* Поля ввода */
         input, textarea {
@@ -143,27 +123,25 @@
             color: #fff;
             font-size: 1rem;
             margin-bottom: 12px;
-            transition: 0.2s;
         }
         input:focus, textarea:focus {
             outline: none;
             border-color: #d4af37;
-            box-shadow: 0 0 8px rgba(212,175,55,0.3);
         }
 
-        /* Инфо-блок */
+        /* Инфо-блок (время/погода) */
         .info-row {
             display: flex;
             justify-content: space-between;
-            margin-top: 16px;
-            flex-wrap: wrap;
+            margin-top: 14px;
             gap: 8px;
+            flex-wrap: wrap;
         }
         .weather-time {
             background: #111;
             border-radius: 40px;
             padding: 6px 14px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #d4af37;
             border: 1px solid #333;
         }
@@ -173,12 +151,6 @@
             font-size: 0.65rem;
             margin-top: 20px;
             color: #555;
-        }
-
-        /* Список рефералов (для отображения в админке) */
-        .ref-item {
-            padding: 8px;
-            border-bottom: 1px solid #222;
         }
     </style>
 </head>
@@ -194,7 +166,7 @@
     </div>
     <div class="info-row">
         <div class="weather-time" id="timeDisplay">⏰ --:--:--</div>
-        <div class="weather-time" id="weatherDisplay">🌤️ Загрузка погоды...</div>
+        <div class="weather-time" id="weatherDisplay">🌤️ Загрузка...</div>
     </div>
 </div>
 
@@ -203,19 +175,17 @@
     <div class="tab" data-tab="referrals">👥 Рефералы</div>
     <div class="tab" data-tab="achievements">🏆 Достижения</div>
     <div class="tab" data-tab="profile">✏️ Профиль</div>
-    <!-- Админ-таб добавится динамически -->
 </div>
 
-<!-- Главная вкладка -->
 <div id="home" class="tab-content active">
     <div class="card">
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
             <button id="checkSubBtn">📌 Проверить подписку</button>
             <button id="topBtn">🏆 Топ рефералов</button>
-            <button id="myAchievementsBtn">🏅 Мои достижения</button>
+            <button id="myAchievementsBtn">🏅 Достижения</button>
         </div>
-        <div style="margin-top: 20px; text-align: center;">
-            <p>🔗 Твоя реферальная ссылка:</p>
+        <div style="margin-top: 18px; text-align: center;">
+            <p>🔗 Реферальная ссылка:</p>
             <input type="text" id="refLinkInput" readonly style="text-align: center;">
             <div style="margin-top: 10px;">
                 <button id="copyRefBtn">📋 Копировать</button>
@@ -225,65 +195,59 @@
     </div>
 </div>
 
-<!-- Рефералы -->
 <div id="referrals" class="tab-content">
     <div class="card">
-        <button id="showRefsBtn" style="width:100%">👥 Показать моих рефералов (бот пришлёт в чат)</button>
+        <button id="showRefsBtn" style="width:100%">👥 Показать моих рефералов</button>
     </div>
 </div>
 
-<!-- Достижения -->
 <div id="achievements" class="tab-content">
     <div class="card">
-        <p>✨ Нажмите «Мои достижения» на главной, чтобы увидеть список.</p>
+        <p>✨ Нажмите «Достижения» на главной.</p>
     </div>
 </div>
 
-<!-- Профиль (смена имени) -->
 <div id="profile" class="tab-content">
     <div class="card">
-        <label>Имя (отображается в боте):</label>
+        <label>Имя (в боте):</label>
         <input type="text" id="editName" placeholder="Новое имя">
-        <button id="saveProfileBtn">💾 Сохранить имя</button>
+        <button id="saveProfileBtn">💾 Сохранить</button>
     </div>
 </div>
 
-<!-- Админ-панель (изначально скрыта, показывается только при ?admin=1) -->
 <div id="admin" class="tab-content">
     <div class="card">
         <h3>📢 Рассылка</h3>
         <input type="text" id="bcHeader" placeholder="Заголовок">
         <textarea id="bcText" rows="3" placeholder="Текст"></textarea>
         <input type="file" id="bcPhoto" accept="image/*">
-        <button id="startBroadcastBtn">▶ Запустить (только текст)</button>
-        <button id="startBroadcastMediaBtn">🖼️ Запустить с фото</button>
+        <button id="startBroadcastBtn">▶ Только текст</button>
+        <button id="startBroadcastMediaBtn">🖼️ Текст + фото</button>
     </div>
     <div class="card">
-        <h3>🔍 Поиск пользователя</h3>
+        <h3>🔍 Поиск</h3>
         <input type="text" id="searchUserId" placeholder="ID или @username">
         <button id="searchUserBtn">Найти</button>
     </div>
     <div class="card">
         <h3>🚫 Бан / ✅ Разбан</h3>
-        <input type="text" id="banUserId" placeholder="ID пользователя">
+        <input type="text" id="banUserId" placeholder="ID">
         <button id="banUserBtn" class="danger-btn">Забанить</button>
         <button id="unbanUserBtn" class="secondary-btn">Разбанить</button>
     </div>
     <div class="card">
         <h3>📊 Графики</h3>
-        <button id="statsBtn">Показать графики</button>
+        <button id="statsBtn">Показать</button>
     </div>
 </div>
 
-<footer>QOWL World — премиум-доступ. Данные синхронизируются с ботом @qowl_bot</footer>
+<footer>QOWL World — синхронизация с ботом</footer>
 
 <script>
-    // -------------------- ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP --------------------
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
-    // Получение данных пользователя
     let user = tg.initDataUnsafe?.user || {};
     let userId = user.id;
     let firstName = user.first_name || "Гость";
@@ -292,11 +256,10 @@
     let photoUrl = user.photo_url || "";
     let isPremium = user.is_premium || false;
 
-    // Проверка админа через URL параметр
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get('admin') === '1';
 
-    // DOM элементы
+    // DOM
     const userAvatar = document.getElementById("userAvatar");
     const userFullName = document.getElementById("userFullName");
     const userUsernameSpan = document.getElementById("userUsername");
@@ -311,8 +274,6 @@
     const copyRefBtn = document.getElementById("copyRefBtn");
     const shareRefBtn = document.getElementById("shareRefBtn");
     const saveProfileBtn = document.getElementById("saveProfileBtn");
-
-    // Админские элементы
     const startBroadcastBtn = document.getElementById("startBroadcastBtn");
     const startBroadcastMediaBtn = document.getElementById("startBroadcastMediaBtn");
     const searchUserBtn = document.getElementById("searchUserBtn");
@@ -320,14 +281,13 @@
     const unbanUserBtn = document.getElementById("unbanUserBtn");
     const statsBtn = document.getElementById("statsBtn");
 
-    // -------------------- ФУНКЦИЯ ОТПРАВКИ КОМАНД БОТУ --------------------
     function sendToBot(type, extra = {}) {
         const payload = JSON.stringify({ type, ...extra });
         tg.sendData(payload);
-        console.log("Sent:", payload);
+        console.log("📤 Отправлено:", payload);
     }
 
-    // -------------------- ОБРАБОТЧИКИ КНОПОК --------------------
+    // Обработчики
     showRefsBtn.onclick = () => sendToBot("get_refs");
     checkSubBtn.onclick = () => sendToBot("check_subscription_web");
     topBtn.onclick = () => sendToBot("get_top");
@@ -340,103 +300,75 @@
     copyRefBtn.onclick = () => {
         refLinkInput.select();
         document.execCommand("copy");
-        tg.showPopup({ title: "Готово", message: "Ссылка скопирована!", buttons: [{ type: "ok" }] });
+        tg.showPopup({ title: "Готово", message: "Ссылка скопирована", buttons: [{ type: "ok" }] });
     };
     shareRefBtn.onclick = () => {
         const link = refLinkInput.value;
-        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к QOWL World!`);
+        window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=Присоединяйся к QOWL!`);
     };
 
-    // Админские обработчики (только если isAdmin)
     if (isAdmin) {
-        if (startBroadcastBtn) {
-            startBroadcastBtn.onclick = () => {
-                const header = document.getElementById("bcHeader").value;
-                const text = document.getElementById("bcText").value;
-                if (header && text) sendToBot("start_broadcast", { header, text });
-                else alert("Заполните заголовок и текст");
-            };
-        }
-        if (startBroadcastMediaBtn) {
-            startBroadcastMediaBtn.onclick = async () => {
-                const header = document.getElementById("bcHeader").value;
-                const text = document.getElementById("bcText").value;
-                const fileInput = document.getElementById("bcPhoto");
-                if (!header || !text) {
-                    alert("Заполните заголовок и текст");
-                    return;
-                }
-                if (!fileInput.files.length) {
-                    alert("Выберите фото");
-                    return;
-                }
-                const file = fileInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64 = e.target.result;
-                    sendToBot("start_broadcast_with_media", { header, text, photo: base64 });
-                };
-                reader.readAsDataURL(file);
-            };
-        }
-        if (searchUserBtn) {
-            searchUserBtn.onclick = () => {
-                const query = document.getElementById("searchUserId").value.trim();
-                if (query) sendToBot("search_user", { query });
-                else alert("Введите ID или @username");
-            };
-        }
-        if (banUserBtn) {
-            banUserBtn.onclick = () => {
-                const uid = document.getElementById("banUserId").value.trim();
-                if (uid && /^\d+$/.test(uid)) sendToBot("ban_user", { user_id: parseInt(uid) });
-                else alert("Введите числовой ID");
-            };
-        }
-        if (unbanUserBtn) {
-            unbanUserBtn.onclick = () => {
-                const uid = document.getElementById("banUserId").value.trim();
-                if (uid && /^\d+$/.test(uid)) sendToBot("unban_user", { user_id: parseInt(uid) });
-                else alert("Введите числовой ID");
-            };
-        }
-        if (statsBtn) {
-            statsBtn.onclick = () => sendToBot("get_stats");
-        }
+        if (startBroadcastBtn) startBroadcastBtn.onclick = () => {
+            const h = document.getElementById("bcHeader").value;
+            const t = document.getElementById("bcText").value;
+            if (h && t) sendToBot("start_broadcast", { header: h, text: t });
+            else alert("Заполните заголовок и текст");
+        };
+        if (startBroadcastMediaBtn) startBroadcastMediaBtn.onclick = async () => {
+            const h = document.getElementById("bcHeader").value;
+            const t = document.getElementById("bcText").value;
+            const fileInput = document.getElementById("bcPhoto");
+            if (!h || !t) { alert("Заполните заголовок и текст"); return; }
+            if (!fileInput.files.length) { alert("Выберите фото"); return; }
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = e => sendToBot("start_broadcast_with_media", { header: h, text: t, photo: e.target.result });
+            reader.readAsDataURL(file);
+        };
+        if (searchUserBtn) searchUserBtn.onclick = () => {
+            const q = document.getElementById("searchUserId").value.trim();
+            if (q) sendToBot("search_user", { query: q });
+            else alert("Введите ID или @username");
+        };
+        if (banUserBtn) banUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendToBot("ban_user", { user_id: parseInt(uid) });
+            else alert("Введите числовой ID");
+        };
+        if (unbanUserBtn) unbanUserBtn.onclick = () => {
+            const uid = document.getElementById("banUserId").value.trim();
+            if (uid && /^\d+$/.test(uid)) sendToBot("unban_user", { user_id: parseInt(uid) });
+            else alert("Введите ID");
+        };
+        if (statsBtn) statsBtn.onclick = () => sendToBot("get_stats");
     }
 
-    // -------------------- ОТОБРАЖЕНИЕ ПРОФИЛЯ --------------------
-    if (photoUrl) {
-        userAvatar.src = photoUrl;
-    } else {
-        // Генерация аватара по инициалам
+    // Профиль
+    if (photoUrl) userAvatar.src = photoUrl;
+    else {
         const canvas = document.createElement('canvas');
-        canvas.width = 70; canvas.height = 70;
+        canvas.width = 64; canvas.height = 64;
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = "#d4af37";
-        ctx.fillRect(0, 0, 70, 70);
+        ctx.fillRect(0, 0, 64, 64);
         ctx.fillStyle = "#000";
-        ctx.font = "bold 32px sans-serif";
-        ctx.fillText((firstName[0] || "Q").toUpperCase(), 22, 48);
+        ctx.font = "bold 28px sans-serif";
+        ctx.fillText((firstName[0] || "Q").toUpperCase(), 20, 44);
         userAvatar.src = canvas.toDataURL();
     }
     const fullName = lastName ? `${firstName} ${lastName}` : firstName;
     userFullName.innerHTML = `${fullName} ${isPremium ? '<span class="badge">⭐ PREMIUM</span>' : ''}`;
     userUsernameSpan.innerText = username ? `@${username}` : "";
 
-    // Реферальная ссылка (бот @qowl_bot)
     const botUsername = "qowl_bot";
-    const refLink = `https://t.me/${botUsername}?start=${userId}`;
-    refLinkInput.value = refLink;
+    refLinkInput.value = `https://t.me/${botUsername}?start=${userId}`;
 
-    // -------------------- ВРЕМЯ И ПОГОДА --------------------
+    // Время и погода
     function updateTime() {
-        const now = new Date();
-        document.getElementById("timeDisplay").innerHTML = `⏰ ${now.toLocaleTimeString()}`;
+        document.getElementById("timeDisplay").innerHTML = `⏰ ${new Date().toLocaleTimeString()}`;
     }
     updateTime();
     setInterval(updateTime, 1000);
-
     async function fetchWeather() {
         try {
             const res = await fetch('https://ipapi.co/json/');
@@ -454,7 +386,7 @@
     fetchWeather();
     setInterval(fetchWeather, 600000);
 
-    // -------------------- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК --------------------
+    // Вкладки
     const tabs = document.querySelectorAll(".tab");
     const contents = document.querySelectorAll(".tab-content");
     function switchTab(tabId) {
@@ -463,18 +395,11 @@
         tabs.forEach(t => t.classList.remove("active"));
         document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add("active");
     }
-    tabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-            const tabId = tab.getAttribute("data-tab");
-            switchTab(tabId);
-        });
-    });
+    tabs.forEach(tab => tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab"))));
 
-    // -------------------- ПОКАЗ АДМИН-ВКЛАДКИ (если админ) --------------------
     if (isAdmin) {
         const tabsContainer = document.getElementById("tabsContainer");
-        let adminTab = document.querySelector('.tab[data-tab="admin"]');
-        if (!adminTab) {
+        if (!document.querySelector('.tab[data-tab="admin"]')) {
             const newTab = document.createElement("div");
             newTab.className = "tab";
             newTab.setAttribute("data-tab", "admin");
@@ -482,22 +407,10 @@
             newTab.addEventListener("click", () => switchTab("admin"));
             tabsContainer.appendChild(newTab);
         }
-        // Убедимся, что блок admin существует
-        const adminDiv = document.getElementById("admin");
-        if (adminDiv) adminDiv.classList.remove("active");
-        // Добавим его в список content
-        if (!Array.from(contents).includes(adminDiv)) {
-            document.body.appendChild(adminDiv);
-        }
     }
 
-    // -------------------- АВТОМАТИЧЕСКАЯ ПРОВЕРКА ПОДПИСКИ (при загрузке) --------------------
+    // Автоматическая проверка подписки
     sendToBot("check_subscription_auto");
-
-    // -------------------- ДОПОЛНИТЕЛЬНО: ПОДСКАЗКА О РАБОТЕ АДМИНКИ --------------------
-    if (isAdmin) {
-        console.log("Админ-режим активирован. Доступны дополнительные функции.");
-    }
 </script>
 </body>
 </html>
