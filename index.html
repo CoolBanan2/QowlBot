@@ -3,19 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест связи</title>
+    <title>Диагностика связи</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <h1>Тест связи с ботом</h1>
-    <button id="btn">Отправить данные</button>
-    <p>Нажмите кнопку, затем проверьте консоль бота.</p>
+    <h2>Диагностика WebApp → Бот</h2>
+    <div id="log"></div>
+    <button id="btn">Отправить через tg.sendData</button>
+    <button id="btn2">Отправить через HTTP API</button>
     <script>
+        function log(msg) {
+            const div = document.getElementById('log');
+            div.innerHTML += `<p>${new Date().toLocaleTimeString()}: ${msg}</p>`;
+        }
         const tg = Telegram.WebApp;
         tg.ready();
+        log("WebApp инициализирован. initDataUnsafe.user: " + JSON.stringify(tg.initDataUnsafe?.user));
+
         document.getElementById('btn').onclick = () => {
-            tg.sendData(JSON.stringify({ test: "hello", time: Date.now() }));
-            alert("Отправлено!");
+            log("Нажата кнопка sendData");
+            try {
+                tg.sendData(JSON.stringify({ type: "test", time: Date.now() }));
+                log("sendData выполнен без ошибок");
+            } catch(e) {
+                log("Ошибка sendData: " + e.message);
+            }
+        };
+
+        document.getElementById('btn2').onclick = async () => {
+            const token = "8638375796:AAGlo9QbXA_viI8VxDJ5QF2zWe6im9BgF0o";
+            const chat_id = tg.initDataUnsafe?.user?.id;
+            if (!chat_id) {
+                log("Нет chat_id, невозможно отправить HTTP-запрос");
+                return;
+            }
+            log("Отправка через HTTP API...");
+            try {
+                const resp = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id, text: "Тест из веб-приложения (HTTP)" })
+                });
+                const data = await resp.json();
+                log("Ответ API: " + JSON.stringify(data));
+            } catch(e) {
+                log("Ошибка HTTP: " + e.message);
+            }
         };
     </script>
 </body>
